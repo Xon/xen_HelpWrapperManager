@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="sedo_help_wrapper_manager" title="Help Wrapper Manager" version_string="1.0.0" version_id="1" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="option_list_sedo_help_wrapper_settings"><![CDATA[<xen:require css="option_list_sedo_help_wrapper_settings.css" />
+
+<xen:controlunit label="{$preparedOption.title}" class="sedo_ctrl_tabs_settings" hint="{$preparedOption.hint}">
+	<xen:explain>{xen:raw $preparedOption.explain}</xen:explain>
+	<xen:html>
+		<ul class="sectionMain sedo_page_wrapper">
+			<xen:foreach loop="$PagesData" key="$pageId" value="$data">
+			<ul>
+      				<li class="section secondaryContent {xen:if '{$config.{$pageId}.alwaysHidden}', 'disablePage'} {xen:if '{$config.{$pageId}.parent}', 'isChild'}">
+      					<p class="textHeading">{xen:phrase name}: {$data.name} ({xen:phrase id}: {$pageId})</p>
+
+					<xen:selectunit label="{xen:phrase parent}:" rows="5" name="{$fieldPrefix}[{$preparedOption.option_id}][{$pageId}][parent]" value="{$data.parent}">	
+						<xen:foreach loop="$data.availableParents" key="$parentId" value="$parentName">
+							<xen:set var="$parent_selected">{xen:if "{$parentId} == {$data.parent}", 1, 0}</xen:set>
+							<xen:option value="{$parentId}" label="{$parentName}" selected="{$parent_selected}" />
+						</xen:foreach>
+					</xen:selectunit>
+					
+      					<dl class="ctrlUnit">
+      						<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$pageId}][displayOrder]">{xen:phrase order}:</label></dt>
+      						<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$pageId}][displayOrder]" value="{$data.displayOrder}" placeholder="{xen:phrase order}" size="6" /></dd>
+      					</dl>
+      					
+      					{xen:raw $data.checkboxTemplate_usr}
+
+					<xen:checkboxunit label="" explain="{xen:phrase sedo_helpwrapper_page_always_hidden_explain}">
+						<xen:option name="{$fieldPrefix}[{$preparedOption.option_id}][{$pageId}][alwaysHidden]" selected="{$data.alwaysHidden}" value="{$data.alwaysHidden}">{xen:phrase sedo_helpwrapper_page_always_hidden}</xen:option>
+					</xen:checkboxunit>
+
+      					<p class="default_values muted">{xen:phrase sedo_helpwrapper_default_values, 'order={$data.originalOrder}'}</p>
+      					<input type="hidden" name="{$fieldPrefix}[{$preparedOption.option_id}][{$pageId}][originalOrder]" value="{$data.originalOrder}" />
+      				</li>
+				</ul>
+			</li>
+			</xen:foreach>
+	
+			<div class="raz"><input type="checkbox" name="{$fieldPrefix}[{$preparedOption.option_id}][raz]" value="1" /> {xen:phrase reset}</div>
+		</ul>
+		{xen:raw $editLink}
+	</xen:html>
+</xen:controlunit>]]></template>
+    <template title="option_list_sedo_help_wrapper_settings.css"><![CDATA[.sedo_page_wrapper .secondaryContent.disablePage{
+	background-color: #f0f0f0;
+}
+
+.sedo_page_wrapper .default_values{
+	font-size: 8pt;
+}
+
+.sedo_page_wrapper .isChild{
+	margin-left: 20pt;
+	border-left: 3px dotted {xen:property primaryDark};
+}
+
+.sedo_page_wrapper .section.secondaryContent{
+	margin-top: -3px;
+}
+
+.sedo_page_wrapper .raz{
+	text-align:right;
+}]]></template>
+  </admin_templates>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="extendHelpWrapperView" active="1" hint="XenForo_ViewPublic_Help_Wrapper" description="Extends XenForo_ViewPublic_Help_Wrapper"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="extendHelpIndexView" active="1" hint="XenForo_ViewPublic_Help_Index" description="Extends XenForo_ViewPublic_Help_Index"/>
+    <listener event_id="template_create" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="rerouteHelpIndexTemplate" active="1" hint="help_index" description="Reroute Help Index"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="sedo_help_wrapper_manager" display_order="110001" debug_only="0"/>
+    <option option_id="sedo_helpwrapper_settings" edit_format="callback" data_type="array" can_backup="1" validation_class="Sedo_HelpWrapperManager_Listener" validation_method="helpWrapper_settings_validation">
+      <default_value></default_value>
+      <edit_format_params>Sedo_HelpWrapperManager_Listener::helpWrapper_settings</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="sedo_help_wrapper_manager" display_order="10"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_sedo_help_wrapper_manager" version_id="1" version_string="1.0.0"><![CDATA[Help Wrapper Manager]]></phrase>
+    <phrase title="option_group_sedo_help_wrapper_manager_description" version_id="1" version_string="1.0.0"><![CDATA[Control your help pages here]]></phrase>
+    <phrase title="option_sedo_helpwrapper_settings" version_id="1" version_string="1.0.0"><![CDATA[Help wrapper settings]]></phrase>
+    <phrase title="option_sedo_helpwrapper_settings_explain" version_id="1" version_string="1.0.0"><![CDATA[]]></phrase>
+    <phrase title="sedo_helpwrapper_default_values" version_id="1" version_string="1.0.0"><![CDATA[Default display order: {order}]]></phrase>
+    <phrase title="sedo_helpwrapper_hide_page_for_these_usergroups" version_id="1" version_string="1.0.0"><![CDATA[Hide to these usergroups]]></phrase>
+    <phrase title="sedo_helpwrapper_page_always_hidden" version_id="1" version_string="1.0.0"><![CDATA[Always hidden]]></phrase>
+    <phrase title="sedo_helpwrapper_page_always_hidden_explain" version_id="1" version_string="1.0.0"><![CDATA[With the direct url, the Help page can still be access]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="sedo_help_wrapper_pages_management" version_id="1" version_string="1.0.0"><![CDATA[<xen:require css="sedo_new_help_index.css" />
+
+<script>
+$(function() {
+	var $selectedChild = $('.helpWrapper.hasChildren').find('.childrenList a.secondaryContent');
+	$selectedChild.parents('.helpWrapper').addClass('selected').find('> li > a').removeClass('primaryContent').addClass('secondaryContent');
+});
+</script>
+
+<xen:foreach loop="$pages" key="$key" value="$page">
+	<xen:if is="{$xenData.{$key}}">
+		<ul class="helpWrapper{xen:if '{$page.hasChildren}', '  hasChildren'}">
+			{xen:raw {$xenData.{$key}}}
+		
+			<xen:if is="{$page.hasChildren}">
+				<ul class="childrenList">
+					<xen:include template="sedo_help_wrapper_pages_management_children">
+						<xen:map from="$page.hasChildren" to="$source" />
+					</xen:include>
+				</ul>
+			</xen:if>
+		</ul>
+	<xen:else />
+		<ul class="helpWrapper{xen:if '{$page.hasChildren}', '  hasChildren'}">
+			<li><a href="{xen:link help, $page}" class="{xen:if "{$selected} == {$page.page_name}", 'secondaryContent', 'primaryContent'}">{$page.title}</a></li>
+
+			<xen:if is="{$page.hasChildren}">
+				<ul class="childrenList">
+					<xen:include template="sedo_help_wrapper_pages_management_children">
+						<xen:map from="$page.hasChildren" to="$source" />
+						<xen:map from="$page.page_name" to="$parentPageName" />
+					</xen:include>
+				</ul>
+			</xen:if>
+		</ul>	
+	</xen:if>
+</xen:foreach>]]></template>
+    <template title="sedo_help_wrapper_pages_management_children" version_id="1" version_string="1.0.0"><![CDATA[	<xen:foreach loop="$source" key="$key" value="$page">
+		<xen:if is="{$xenData.{$key}}">
+			{xen:raw {$xenData.{$key}}}
+		<xen:else />
+			<li><a href="{xen:link help, $page}" class="{xen:if "{$selected} == {$page.page_name}", 'secondaryContent', 'primaryContent'}">{$page.title}</a></li>
+		</xen:if>
+	</xen:foreach>]]></template>
+    <template title="sedo_new_help_index" version_id="1" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase help}</xen:title>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:link help}">{xen:phrase help}</xen:breadcrumb>
+</xen:navigation>
+
+<xen:require css="sedo_new_help_index.css" />
+
+<xen:set var="$xenData.smilies.title"><a href="{xen:link help/smilies}">{xen:phrase smilies}</a></xen:set>
+<xen:set var="$xenData.smilies.description">{xen:phrase this_shows_full_list_of_smilies_you_can_insert_when_posting_message}</xen:set>
+<xen:set var="$xenData.bbCodes.title"><a href="{xen:link help/bb-codes}">{xen:phrase bb_codes}</a></xen:set>
+<xen:set var="$xenData.bbCodes.description">{xen:phrase list_of_bb_codes_you_can_use_to_spice_up_look_of_your_messages}</xen:set>
+<xen:set var="$xenData.trophies.title"><a href="{xen:link help/trophies}">{xen:phrase trophies}</a></xen:set>
+<xen:set var="$xenData.trophies.description">{xen:phrase you_can_earn_trophies_by_carrying_out_different_actions}</xen:set>
+<xen:set var="$xenData.cookies.title"><a href="{xen:link help/cookies}">{xen:phrase cookie_usage}</a></xen:set>
+<xen:set var="$xenData.cookies.description">{xen:phrase this_page_explains_how_this_site_uses_cookies}</xen:set>
+<xen:set var="$xenData.terms.title"><xen:if is="{$tosUrl}"><a href="{$tosUrl}">{xen:phrase terms_and_rules}</a></xen:if></xen:set>
+<xen:set var="$xenData.terms.description"><xen:if is="{$tosUrl}">{xen:phrase you_must_agree_to_these_terms_and_rules_before_using_site}</xen:if></xen:set>
+
+<div class="baseHtml">
+	<xen:foreach loop="$pages" key="$key" value="$page">
+		<xen:if is="{$xenData.{$key}}">
+			<xen:if is="{$xenData.{$key}.title}">
+				<dl class="xenHelp{xen:if '{$page.hasChildren}', ' hasChildren'}">
+					<dt>{xen:raw {$xenData.{$key}.title}}<dt>
+					<dd>{xen:raw {$xenData.{$key}.description}}<dd>
+					<xen:if is="{$page.hasChildren}">
+						<ul><xen:include template="sedo_new_help_index_children">
+							<xen:map from="$page.hasChildren" to="$source" />
+						</xen:include></ul>
+					</xen:if>
+				</dl>
+			</xen:if>
+		<xen:else />
+			<dl class="xenHelp{xen:if '{$page.hasChildren}', ' hasChildren'}">
+				<dt><a href="{xen:link help, $page}">{$page.title}</a><dt>
+				<dd>{$page.description}</dd>
+				<xen:if is="{$page.hasChildren}">
+					<ul><xen:include template="sedo_new_help_index_children">
+							<xen:map from="$page.hasChildren" to="$source" />
+					</xen:include></ul>
+					
+				</xen:if>			
+			</dl>
+		</xen:if>
+	</xen:foreach>
+</div>
+
+<xen:edithint template="sedo_help_wrapper_pages_management" />
+<xen:edithint template="sedo_help_wrapper_pages_management_children" />]]></template>
+    <template title="sedo_new_help_index.css" version_id="1" version_string="1.0.0"><![CDATA[<xen:comment>Index css</xen:comment>
+	.xenHelp.hasChildren li{
+		list-style: outside none upper-roman;
+	}
+	
+	.xenHelp.hasChildren li .title{
+	
+	}
+	.xenHelp.hasChildren li .description{
+	
+	}
+
+<xen:comment>Wrapper css</xen:comment>
+	.helpWrapper.selected > li > a{
+		font-weight: normal;
+	}
+
+	.helpWrapper.hasChildren > li > a{
+		border-bottom: 0;
+	}
+
+	.helpWrapper.selected .childrenList a{	
+		background-image: none;
+		background-color: {xen:property primaryLightest};
+	}
+
+	.helpWrapper.hasChildren .childrenList a:before{
+		content: "⤷";
+		margin-left: 2px;
+		font-weight: normal !important;
+		font-size: 12px;
+	}]]></template>
+    <template title="sedo_new_help_index_children" version_id="1" version_string="1.0.0"><![CDATA[	<xen:foreach loop="$source" key="$key" value="$page">
+		<xen:if is="{$xenData.{$key}}">
+			<xen:if is="{$xenData.{$key}.title}">
+				<li><span class="title">{xen:raw {$xenData.{$key}.title}} - </span><span class="description">{xen:raw {$xenData.{$key}.description}}</span></li>
+			</xen:if>
+		<xen:else />
+				<li><span class="title"><a href="{xen:link help, $page}">{$page.title}</a> - </span><span class="description">{$page.description}</span></li>
+		</xen:if>
+	</xen:foreach>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="help_wrapper" modification_key="sedo_helpwrapper_catch_pagedata" description="Help Wrapper catch and modify pages data" execution_order="11" enabled="1" action="preg_replace">
+      <find><![CDATA[#<xen:foreach loop="\$pages".*?</xen:foreach>#su]]></find>
+      <replace><![CDATA[<xen:if is="{$xenData}">
+	<xen:include template="sedo_help_wrapper_pages_management" />
+<xen:else />
+	$0
+</xen:if>]]></replace>
+    </modification>
+    <modification template="help_wrapper" modification_key="sedo_helpwrapper_catch_xendata" description="Help Wrapper catch and modify xen data" execution_order="10" enabled="1" action="callback">
+      <find><![CDATA[#<xen:hook.*?</xen:hook>#su]]></find>
+      <replace><![CDATA[Sedo_HelpWrapperManager_Listener::helpWrapperTemplateMod]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
