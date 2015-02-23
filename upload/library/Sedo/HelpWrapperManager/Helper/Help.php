@@ -49,7 +49,13 @@ class Sedo_HelpWrapperManager_Helper_Help
 
 			$reorderedPages[$pageId] = $pageData;
 		}
-		
+
+		$catchupNewpages = array_diff_key($pagesSource, $reorderedPages);
+		if($catchupNewpages)
+		{
+			$reorderedPages+=$catchupNewpages;
+		}
+
 		return $reorderedPages;
 	}
 }
