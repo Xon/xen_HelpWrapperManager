@@ -9,6 +9,7 @@ class Sedo_HelpWrapperManager_Helper_Help
 		$settings = XenForo_Application::get('options')->get('sedo_helpwrapper_settings');
 		$visitor = XenForo_Visitor::getInstance();
 		$visitorUserGroupIds = array_merge(array((string)$visitor['user_group_id']), (explode(',', $visitor['secondary_group_ids'])));
+		$childrenRef = array();
 		
 		foreach($settings as $pageId => $pageSettings)
 		{
@@ -44,13 +45,14 @@ class Sedo_HelpWrapperManager_Helper_Help
 			if($pageData['isChild'] && isset($reorderedPages[$pageData['parentId']]))
 			{
 				$reorderedPages[$pageData['parentId']]['hasChildren'][$pageId] = $pageData;
+				$childrenRef[$pageId] = $pageData;
 				continue;		
 			}
 
 			$reorderedPages[$pageId] = $pageData;
 		}
 
-		$catchupNewpages = array_diff_key($pagesSource, $reorderedPages);
+		$catchupNewpages = array_diff_key($pagesSource, array_merge($reorderedPages, $childrenRef));
 		if($catchupNewpages)
 		{
 			$reorderedPages+=$catchupNewpages;

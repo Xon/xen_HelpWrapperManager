@@ -209,11 +209,10 @@ class Sedo_HelpWrapperManager_Listener
 		unset($pageData); // was passed as a reference above
 		$configsKeysRaz = array_keys($configs);
 
-
 		foreach($children as $parentId => $pages)
 		{
 			uasort($pages, array('Sedo_HelpWrapperManager_Listener', 'sortByDisplayOrder'));
-			$pages = array_reverse($pages); // the loop will reverse the order
+			$pages = array_reverse($pages, true); // the loop will reverse the order
 
 			foreach($pages as $pageId => $pageData)
 			{
@@ -247,6 +246,7 @@ class Sedo_HelpWrapperManager_Listener
 		}
 
 		$configs = $newConfigs;
+		
 		return true;
 	}
 
