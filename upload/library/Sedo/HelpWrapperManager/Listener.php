@@ -57,6 +57,15 @@ class Sedo_HelpWrapperManager_Listener
 		}
 	}
 
+
+	public static function extendHelpPageView($class, array &$extend)
+	{
+		if($class == 'XenForo_ViewPublic_Help_Page')
+		{
+			$extend[] = 'Sedo_HelpWrapperManager_ViewPublic_Help_Page';
+		}
+	}
+
 	public static function helpWrapper_settings(XenForo_View $view, $fieldPrefix, array $preparedOption, $canEdit)
 	{
       		$config = $preparedOption['option_value'];

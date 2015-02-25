@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_help_wrapper_manager" title="Help Wrapper Manager" version_string="1.0.1" version_id="2" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="sedo_help_wrapper_manager" title="Help Wrapper Manager" version_string="1.1.0" version_id="3" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -71,6 +71,7 @@
   <code_event_listeners>
     <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="extendHelpWrapperView" active="1" hint="XenForo_ViewPublic_Help_Wrapper" description="Extends XenForo_ViewPublic_Help_Wrapper"/>
     <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="extendHelpIndexView" active="1" hint="XenForo_ViewPublic_Help_Index" description="Extends XenForo_ViewPublic_Help_Index"/>
+    <listener event_id="load_class_view" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="extendHelpPageView" active="1" hint="XenForo_ViewPublic_Help_Page" description="Extends XenForo_ViewPublic_Help_Page"/>
     <listener event_id="template_create" execute_order="10" callback_class="Sedo_HelpWrapperManager_Listener" callback_method="rerouteHelpIndexTemplate" active="1" hint="help_index" description="Reroute Help Index"/>
   </code_event_listeners>
   <cron/>
@@ -218,17 +219,37 @@ $(function() {
 		border-bottom: 0;
 	}
 
+	.helpWrapper.hasChildren.selected > li{
+		background-color: {xen:property primaryLightish};
+	}
+	
+	
+	.helpWrapper.hasChildren.selected > li > a{
+		color: {xen:property primaryMedium};
+	}	
+
 	.helpWrapper.selected .childrenList a{	
 		background-image: none;
 		background-color: {xen:property primaryLightest};
 	}
 
 	.helpWrapper.hasChildren .childrenList a:before{
-		content: "⤷";
+		content: "↳";
 		margin-left: 2px;
 		font-weight: normal !important;
-		font-size: 12px;
-	}]]></template>
+		font-size: 14px;
+	}
+	
+	.helpWrapper.hasChildren .childrenList a{
+		padding-bottom: 2px;
+		padding-top: 1px;
+		font-size: 8pt;		
+	}
+	
+	.helpWrapper.hasChildren .childrenList a:hover{
+		background-color: {xen:property primaryLightest};
+	}
+]]></template>
     <template title="sedo_new_help_index_children" version_id="1" version_string="1.0.0"><![CDATA[	<xen:foreach loop="$source" key="$key" value="$page">
 		<xen:if is="{$xenData.{$key}}">
 			<xen:if is="{$xenData.{$key}.title}">
