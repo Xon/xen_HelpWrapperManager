@@ -10,6 +10,7 @@ class Sedo_HelpWrapperManager_Helper_Help
 		$visitor = XenForo_Visitor::getInstance();
 		$visitorUserGroupIds = array_merge(array((string)$visitor['user_group_id']), (explode(',', $visitor['secondary_group_ids'])));
 		$childrenRef = array();
+		$alwaysHidden = array();
 		
 		foreach($settings as $pageId => $pageSettings)
 		{
@@ -20,9 +21,10 @@ class Sedo_HelpWrapperManager_Helper_Help
 
 			if(!empty($pageSettings['alwaysHidden']))
 			{
+				$alwaysHidden[$pageId] = $pageSettings;
 				continue;
 			}
-			
+
 			if(!empty($pageSettings['disableUsergroups']))
 			{
 				if(!array_intersect($visitorUserGroupIds, $pageSettings['disableUsergroups']))
@@ -39,6 +41,7 @@ class Sedo_HelpWrapperManager_Helper_Help
 			if($pageData['isChild']  && !isset($reorderedPages[$pageData['parentId']]))
 			{
 				//The parent page might be hidden
+				$alwaysHidden[$pageId] = $pageData;
 				continue;
 			}
 
@@ -53,6 +56,8 @@ class Sedo_HelpWrapperManager_Helper_Help
 		}
 
 		$catchupNewpages = array_diff_key($pagesSource, array_merge($reorderedPages, $childrenRef));
+		$catchupNewpages = array_diff_key($catchupNewpages, $alwaysHidden);
+		
 		if($catchupNewpages)
 		{
 			$reorderedPages+=$catchupNewpages;
