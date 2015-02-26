@@ -55,7 +55,7 @@ class Sedo_HelpWrapperManager_Helper_Help
 			$reorderedPages[$pageId] = $pageData;
 		}
 
-		$catchupNewpages = array_diff_key($pagesSource, array_merge($reorderedPages, $childrenRef));
+		$catchupNewpages = array_diff_key($pagesSource, $reorderedPages+$childrenRef);
 		$catchupNewpages = array_diff_key($catchupNewpages, $alwaysHidden);
 		
 		if($catchupNewpages)
@@ -66,3 +66,4 @@ class Sedo_HelpWrapperManager_Helper_Help
 		return $reorderedPages;
 	}
 }
+//Zend_Debug::dump($parent);
