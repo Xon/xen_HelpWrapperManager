@@ -77,29 +77,32 @@ class Sedo_HelpWrapperManager_ViewPublic_Help_Page extends XFCP_Sedo_HelpWrapper
 		{
 			$search[] = $match[0];
 			$postId = $match[1];
-			$options = $match[2];
-			
-			$options = explode(',', $options);
+
 			$trimFirstLines = false;
 			$trimLastLines = false;
 			$noPicture = false;
 			
-			foreach($options as $option)
+			if(isset($match[2]))
 			{
-				if(!$option) continue;
-				$option = trim($option);
+				$options = explode(',', $match[2]);
 				
-				if(strpos($option, 'delete-firstlines:') !== false)
+				foreach($options as $option)
 				{
-					$trimFirstLines = intval(substr($option, 18));
-				}
-				elseif(strpos($option, 'delete-lastlines:') !== false)
-				{
-					$trimLastLines = intval(substr($option, 17));				
-				}
-				elseif($option == 'no-picture')
-				{
-					$noPicture = true;
+					if(!$option) continue;
+					$option = trim($option);
+					
+					if(strpos($option, 'delete-firstlines:') !== false)
+					{
+						$trimFirstLines = intval(substr($option, 18));
+					}
+					elseif(strpos($option, 'delete-lastlines:') !== false)
+					{
+						$trimLastLines = intval(substr($option, 17));				
+					}
+					elseif($option == 'no-picture')
+					{
+						$noPicture = true;
+					}
 				}
 			}
 			
@@ -146,7 +149,7 @@ class Sedo_HelpWrapperManager_ViewPublic_Help_Page extends XFCP_Sedo_HelpWrapper
 				$replace[] = $messageHtml;
 			}
 		}
-		
+
 		$html = str_replace($search, $replace, $html);
 	}
 

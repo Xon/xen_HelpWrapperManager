@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_help_wrapper_manager" title="Help Wrapper Manager" version_string="1.2.0" version_id="4" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="sedo_help_wrapper_manager" title="Help Wrapper Manager" version_string="1.2.1" version_id="7" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -198,7 +198,7 @@ $(function() {
 
 <xen:edithint template="sedo_help_wrapper_pages_management" />
 <xen:edithint template="sedo_help_wrapper_pages_management_children" />]]></template>
-    <template title="sedo_new_help_index.css" version_id="1" version_string="1.0.0"><![CDATA[<xen:comment>Index css</xen:comment>
+    <template title="sedo_new_help_index.css" version_id="4" version_string="1.2.0"><![CDATA[<xen:comment>Index css</xen:comment>
 	.xenHelp.hasChildren li{
 		list-style: outside none upper-roman;
 	}
