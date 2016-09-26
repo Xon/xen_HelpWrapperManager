@@ -1,6 +1,6 @@
 <?php
 
-class Sedo_TabsController_Model_GetUsergroups extends XenForo_Model
+class Sedo_HelpWrapperManager_Model_GetUsergroups extends XenForo_Model
 {
 	public function getUserGroupsOptions($selectedUserGroupIds)
 	{
