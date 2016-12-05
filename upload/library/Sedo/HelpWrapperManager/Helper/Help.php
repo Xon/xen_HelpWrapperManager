@@ -34,6 +34,12 @@ class Sedo_HelpWrapperManager_Helper_Help
 			}
 			
 			$pageData = (isset($xenPages[$pageId])) ? $xenPages[$pageId] : $pagesSource[$pageId];
+			
+			if(!is_array($pageData))
+			{
+				$pageData = array();
+			}
+			
 			$pageData['hasChildren'] = false;
 			$pageData['isChild'] = (!empty($pageSettings['parent']));
 			$pageData['parentId'] = (!empty($pageSettings['parent'])) ? $pageSettings['parent'] : null;
